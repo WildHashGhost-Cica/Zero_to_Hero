@@ -5,7 +5,7 @@ use cw2::set_contract_version; //uncomment
 
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{Config, CONFIG};
+use crate::state::{Config, CONFIG, Poll, POLLS};
 
 
 const CONTRACT_NAME: &str = "crates.io:zero-to-hero"; //uncomment
@@ -49,13 +49,27 @@ pub fn execute(
 }
 fn execute_create_poll(
     deps: DepsMut,
-    _env: Env,
+    env: Env,
     info: MessageInfo,
     poll_id: String, 
     question: String,
     options: Vec<String>,
 ) -> Result<Response, ContractError> {
-    unimplemented!()
+    if options.len() > 10 {
+        return Err(ContractError::TooManyOptions {});
+    }
+    let mut opts: Vec<(String, u64)> = vec![];
+    for option in options{
+        opts.push((option, 0));
+    }
+    let poll = Poll {
+        creator: info.sender, 
+        question,
+        options:opts,
+    };
+    POLLS.save(deps.storage, poll_id, &poll)?;
+
+    Ok(Response::new())
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
