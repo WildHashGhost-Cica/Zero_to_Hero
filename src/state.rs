@@ -1,8 +1,7 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
 use cosmwasm_std::Addr;
-use cw_storage_plus::Item;
+use cw_storage_plus::{Item, Map};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 //changing State to Config 
@@ -23,3 +22,5 @@ pub struct Ballot{
 }
 
 pub const CONFIG: Item<Config> = Item::new("config");
+pub const POLLS: Map<String, Poll> = Map::new("polls");
+pub const BALLOTS: Map<Addr, String> = Map::new("ballots");
