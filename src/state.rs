@@ -17,4 +17,9 @@ pub struct Poll{
     pub options: Vec<(String, u64)>,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+pub struct Ballot{
+    pub option: String,
+}
+
 pub const CONFIG: Item<Config> = Item::new("config");
