@@ -47,4 +47,25 @@ pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
 }
 
 #[cfg(test)]
-mod tests {}
+mod tests {
+    use cosmwasm_std::attr;
+    use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
+    use crate::contract::instantiate;
+    use crate::msg::InstantiateMsg;
+
+    pub const ADDR1: &str = "addr1";
+    pub const ADDR2: &str = "addr2";
+
+    fn test_instantiate(){
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        let info = mock_info(ADDR1, &vec![]);
+        let msg = InstantiateMsg {admin: None};
+        let res = instantiate(deps.as_mut(), env, info, msg).unwrap();
+
+        assert_eq!(
+            res.attributes,
+            vec![attr("action", "instantiate"), attr("admin", ADDR1)]
+        )
+    }
+}
