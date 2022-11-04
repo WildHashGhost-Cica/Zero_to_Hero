@@ -1,4 +1,4 @@
-use schemars::JsonSchema;
+/*use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use cosmwasm_std::{
@@ -43,4 +43,4 @@ impl CwTemplateContract {
         let res: CustomResponse = QuerierWrapper::<CQ>::new(querier).query(&query)?;
         Ok(res)
     }*/
-}
+}*/
