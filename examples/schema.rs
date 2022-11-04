@@ -3,7 +3,7 @@ use std::fs::create_dir_all;
 
 use cosmwasm_schema::{export_schema, remove_schemas, schema_for};
 
-use zero_to_hero::msg::{CustomResponse, ExecuteMsg, InstantiateMsg, QueryMsg};
+use zero_to_hero::msg::{/*CustomResponse,*/ ExecuteMsg, InstantiateMsg, QueryMsg};
 use zero_to_hero::state::{Config, Poll, Ballot}; //changed State to Config and added Poll,Ballot
 
 fn main() {
@@ -18,5 +18,5 @@ fn main() {
     export_schema(&schema_for!(Config), &out_dir); //Changed State to Config
     export_schema(&schema_for!(Poll), &out_dir); //added extra line
     export_schema(&schema_for!(Ballot), &out_dir); //added extra line 
-    export_schema(&schema_for!(CustomResponse), &out_dir);
+   // export_schema(&schema_for!(CustomResponse), &out_dir);
 }
