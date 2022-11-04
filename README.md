@@ -1,3 +1,6 @@
+This is my walkthrough on Cosmoswasm -Zero to Hero at WBA, it was a great experience! 
+@Japarjam
+
 # CosmWasm Starter Pack
 
 This is a template to build smart contracts in Rust to run inside a
