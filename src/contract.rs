@@ -136,7 +136,8 @@ mod tests {
 
     pub const ADDR1: &str = "addr1";
     pub const ADDR2: &str = "addr2";
-
+    
+    #[test]
     fn test_instantiate(){
         let mut deps = mock_dependencies();
         let env = mock_env();
@@ -168,5 +169,91 @@ mod tests {
             ],
         };
         let _res = execute(deps.as_mut(), env, info, msg).unwrap();
+    }
+    
+    #[test]
+    fn test_execute_create_poll_invalid(){
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        let info = mock_info(ADDR1, &vec![]);
+        let msg = InstantiateMsg{admin: None};
+        let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+
+        let msg = ExecuteMsg::CreatePoll{
+            poll_id: "some_id".to_string(),
+            question: "What's your favourites Cosmos coin?".to_string(),
+            options: vec![
+                "1".to_string(),
+                "2".to_string(),
+                "3".to_string(),
+                "4".to_string(),
+                "5".to_string(),
+                "6".to_string(),
+                "7".to_string(),
+                "8".to_string(),
+                "9".to_string(),
+                "10".to_string(),
+                "11".to_string(),
+            ],
+        };
+        let _res = execute(deps.as_mut(), env, info, msg).unwrap_err();
+    }
+
+    #[test]
+    fn test_execute_vote_valid(){
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        let info = mock_info((ADDR1), &vec![]);
+        let msg = InstantiateMsg{ admin: None};
+        let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+
+        let msg = ExecuteMsg::CreatePoll{
+            poll_id: "some_id".to_string(),
+            question: "What's your favourites Cosmos coin?".to_string(),
+            options: vec![
+                "Cosmos Hub".to_string(),
+                "Juno".to_string(),
+                "Osmosis".to_string(),
+            ],
+        };
+        let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+
+        let msg = ExecuteMsg::Vote{
+            poll_id:"some_id".to_string(),
+            vote: "Juno".to_string(),
+        };
+        let _res = execute(deps.as_mut(), env, info, msg).unwrap();
+    }
+
+    #[test]
+    fn test_execute_vote_invalid(){
+        let mut deps = mock_dependencies();
+        let env = mock_env();
+        let info = mock_info((ADDR1), &vec![]);
+        let msg = InstantiateMsg{ admin: None};
+        let _res = instantiate(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+
+        let msg = ExecuteMsg::Vote{
+            poll_id:"some_id".to_string(),
+            vote: "Juno".to_string(),
+        };
+        let _err = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap_err();
+
+        let msg = ExecuteMsg::CreatePoll{
+            poll_id: "some_id".to_string(),
+            question: "What's your favourites Cosmos coin?".to_string(),
+            options: vec![
+                "Cosmos Hub".to_string(),
+                "Juno".to_string(),
+                "Osmosis".to_string(),
+            ],
+        };
+        let _res = execute(deps.as_mut(), env.clone(), info.clone(), msg).unwrap();
+
+        let msg = ExecuteMsg::Vote{
+            poll_id:"some_id".to_string(),
+            vote: "DVPN".to_string(),
+        };
+        let _res = execute(deps.as_mut(), env, info, msg).unwrap_err();
     }
 }
